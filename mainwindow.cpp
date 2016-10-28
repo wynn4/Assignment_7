@@ -29,3 +29,18 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+
+void MainWindow::on_actionOpen_2_triggered()
+{
+
+}
+
+void MainWindow::on_actionSave_As_2_triggered()
+{
+
+}
+
+void MainWindow::on_actionClose_triggered()
+{
+    this->close();
+}

@@ -27,6 +27,13 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+private slots:
+    void on_actionOpen_2_triggered();
+
+    void on_actionSave_As_2_triggered();
+
+    void on_actionClose_triggered();
+
 private:
 
     Ui::MainWindow *ui;
