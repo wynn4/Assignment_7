@@ -19,7 +19,10 @@ SOURCES += main.cpp\
     shape.cpp \
     rectangle.cpp \
     triangle.cpp \
-    ellipse.cpp
+    ellipse.cpp \
+    box.cpp \
+    ellipsoid.cpp \
+    cone.cpp
 
 
 HEADERS  += mainwindow.h\
@@ -28,7 +31,10 @@ HEADERS  += mainwindow.h\
     shape.h \
     rectangle.h \
     triangle.h \
-    ellipse.h
+    ellipse.h \
+    box.h \
+    ellipsoid.h \
+    cone.h
 
 FORMS    += mainwindow.ui
 RESOURCES += \
