@@ -15,12 +15,20 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp\
     meshfactory.cpp \
-    OpenGLExample.cpp
+    OpenGLExample.cpp \
+    shape.cpp \
+    rectangle.cpp \
+    triangle.cpp \
+    ellipse.cpp
 
 
 HEADERS  += mainwindow.h\
     meshfactory.h \
-    OpenGLExample.h
+    OpenGLExample.h \
+    shape.h \
+    rectangle.h \
+    triangle.h \
+    ellipse.h
 
 FORMS    += mainwindow.ui
 RESOURCES += \
