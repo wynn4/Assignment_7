@@ -26,9 +26,9 @@
 #include<list>
 
 #include"shape.h"
-#include"rectangle.h"
-#include"ellipse.h"
-#include"triangle.h"
+#include"box.h"
+#include"ellipsoid.h"
+#include"cone.h"
 
 
 
@@ -62,6 +62,9 @@ void MainWindow::on_actionClose_triggered()
 {
     this->close();
 }
+
+
+
 
 void MainWindow::open_and_parse_file()
 {
@@ -108,17 +111,16 @@ void MainWindow::open_and_parse_file()
             else if(tokens[i+7].size() != 3) std::cout<< "Error in file for " << tokens[i][0] << std::endl;
             else    //No errors, make the object and add to the list
             {
-                Rectangle* obj = new Rectangle();
+                Box* obj = new Box();
                 obj->SetIdentifier(std::stoi(tokens[i][1]));
-                obj->SetOrigin(std::stoi(tokens[i+1][0]), std::stoi(tokens[i+1][1]));
-                obj->SetWidth(std::stoi(tokens[i+1][2]));
-                obj->SetHeight(std::stoi(tokens[i+1][3]));
-                obj->SetFillColor(std::stoi(tokens[i+2][0]), std::stoi(tokens[i+2][1]), std::stoi(tokens[i+2][2]));
-                obj->SetLineWidth(std::stoi(tokens[i+3][0]));
-                obj->SetLineColor(std::stoi(tokens[i+4][0]), std::stoi(tokens[i+4][1]), std::stoi(tokens[i+4][2]));
-                obj->SetTranslation(std::stoi(tokens[i+5][0]), std::stoi(tokens[i+5][1]));
-                obj->SetRotation(std::stoi(tokens[i+6][0]));
-                obj->SetScale(std::stoi(tokens[i+7][0]), std::stoi(tokens[i+7][1]));
+                obj->SetOrigin(std::stoi(tokens[i+1][0]), std::stoi(tokens[i+1][1]), std::stoi(tokens[i+1][2]));
+                obj->SetWidth(std::stoi(tokens[i+1][3]));
+                obj->SetHeight(std::stoi(tokens[i+1][4]));
+                obj->SetDepth(std::stoi(tokens[i+1][5]));
+                obj->SetFillColor(std::stof(tokens[i+2][0]), std::stof(tokens[i+2][1]), std::stof(tokens[i+2][2]));
+                obj->SetTranslation(std::stoi(tokens[i+3][0]), std::stoi(tokens[i+3][1]), std::stoi(tokens[i+3][2]));
+                obj->SetRotation(std::stoi(tokens[i+4][0]), std::stoi(tokens[i+5][0]), std::stoi(tokens[i+6][0]));
+                obj->SetScale(std::stoi(tokens[i+7][0]), std::stoi(tokens[i+7][1]), std::stoi(tokens[i+7][2]));
                 L.push_back(obj);
                 std::cout << tokens[i][0] << " object added to list" << std::endl;
             }
@@ -138,17 +140,16 @@ void MainWindow::open_and_parse_file()
             else if(tokens[i+7].size() != 3) std::cout<< "Error in file for " << tokens[i][0] << std::endl;
             else
             {
-                Ellipse* obj = new Ellipse();
+                Ellipsoid* obj = new Ellipsoid();
                 obj->SetIdentifier(std::stoi(tokens[i][1]));
-                obj->SetOrigin(std::stoi(tokens[i+1][0]), std::stoi(tokens[i+1][1]));
-                obj->SetWidth(std::stoi(tokens[i+1][2]));
-                obj->SetHeight(std::stoi(tokens[i+1][3]));
-                obj->SetFillColor(std::stoi(tokens[i+2][0]), std::stoi(tokens[i+2][1]), std::stoi(tokens[i+2][2]));
-                obj->SetLineWidth(std::stoi(tokens[i+3][0]));
-                obj->SetLineColor(std::stoi(tokens[i+4][0]), std::stoi(tokens[i+4][1]), std::stoi(tokens[i+4][2]));
-                obj->SetTranslation(std::stoi(tokens[i+5][0]), std::stoi(tokens[i+5][1]));
-                obj->SetRotation(std::stoi(tokens[i+6][0]));
-                obj->SetScale(std::stoi(tokens[i+7][0]), std::stoi(tokens[i+7][1]));
+                obj->SetOrigin(std::stoi(tokens[i+1][0]), std::stoi(tokens[i+1][1]), std::stoi(tokens[i+1][2]));
+                obj->SetRadiusX(std::stoi(tokens[i+1][3]));
+                obj->SetRadiusY(std::stoi(tokens[i+1][4]));
+                obj->SetRadiusZ(std::stoi(tokens[i+1][5]));
+                obj->SetFillColor(std::stof(tokens[i+2][0]), std::stof(tokens[i+2][1]), std::stof(tokens[i+2][2]));
+                obj->SetTranslation(std::stoi(tokens[i+3][0]), std::stoi(tokens[i+3][1]), std::stoi(tokens[i+3][2]));
+                obj->SetRotation(std::stoi(tokens[i+4][0]), std::stoi(tokens[i+5][0]), std::stoi(tokens[i+6][0]));
+                obj->SetScale(std::stoi(tokens[i+7][0]), std::stoi(tokens[i+7][1]), std::stoi(tokens[i+7][2]));
                 L.push_back(obj);
                 std::cout << tokens[i][0] << " object added to list" << std::endl;
             }
@@ -166,16 +167,16 @@ void MainWindow::open_and_parse_file()
             else if(tokens[i+7].size() != 3) std::cout<< "Error in file for " << tokens[i][0] << std::endl;
             else
             {
-                Triangle* obj = new Triangle();
+                Cone* obj = new Cone();
                 obj->SetIdentifier(std::stoi(tokens[i][1]));
-                obj->SetPoints(std::stoi(tokens[i+1][0]), std::stoi(tokens[i+1][1]), std::stoi(tokens[i+1][2]), std::stoi(tokens[i+1][3]), \
-                        std::stoi(tokens[i+1][4]), std::stoi(tokens[i+1][5]));
-                obj->SetFillColor(std::stoi(tokens[i+2][0]), std::stoi(tokens[i+2][1]), std::stoi(tokens[i+2][2]));
-                obj->SetLineWidth(std::stoi(tokens[i+3][0]));
-                obj->SetLineColor(std::stoi(tokens[i+4][0]), std::stoi(tokens[i+4][1]), std::stoi(tokens[i+4][2]));
-                obj->SetTranslation(std::stoi(tokens[i+5][0]), std::stoi(tokens[i+5][1]));
-                obj->SetRotation(std::stoi(tokens[i+6][0]));
-                obj->SetScale(std::stoi(tokens[i+7][0]), std::stoi(tokens[i+7][1]));
+                obj->SetOrigin(std::stoi(tokens[i+1][0]), std::stoi(tokens[i+1][1]), std::stoi(tokens[i+1][2]));
+                obj->SetRadiusX(std::stoi(tokens[i+1][3]));
+                obj->SetRadiusY(std::stoi(tokens[i+1][4]));
+                obj->SetHeight(std::stoi(tokens[i+1][5]));
+                obj->SetFillColor(std::stof(tokens[i+2][0]), std::stof(tokens[i+2][1]), std::stof(tokens[i+2][2]));
+                obj->SetTranslation(std::stoi(tokens[i+3][0]), std::stoi(tokens[i+3][1]), std::stoi(tokens[i+3][2]));
+                obj->SetRotation(std::stoi(tokens[i+4][0]), std::stoi(tokens[i+5][0]), std::stoi(tokens[i+6][0]));
+                obj->SetScale(std::stoi(tokens[i+7][0]), std::stoi(tokens[i+7][1]), std::stoi(tokens[i+7][2]));
                 L.push_back(obj);
                 std::cout << tokens[i][0] << " object added to list" << std::endl;
             }

@@ -21,43 +21,43 @@ public:
 
     //Methods (functions) of class Shape
     void GetIdentifier(int &ID);
-    void GetTranslation(int &tx, int &ty);
-    void GetRotation(int &rz);
-    void GetScale(int &sx, int &sy);
-    void GetFillColor(int &r, int &g, int &b);
+    void GetTranslation(int &tx, int &ty, int &tz);
+    void GetRotation(int &rx, int &ry, int &rz);
+    void GetScale(int &sx, int &sy, int &sz);
+    void GetFillColor(float &r, float &g, float &b);
     void GetLineColor(int &r, int &g, int &b);
     void GetLineWidth(int &width);
 
 
 
     void SetIdentifier(const int ID);
-    void SetTranslation(const int tx, const int ty);
-    void SetRotation(const int rz);
-    void SetScale(const int sx, const int sy);
-    void SetFillColor(const int r, const int g, const int b);
+    void SetTranslation(const int tx, const int ty, const int tz);
+    void SetRotation(const int rx, const int ry, const int rz);
+    void SetScale(const int sx, const int sy, const int sz);
+    void SetFillColor(const float r, const float g, const float b);
     void SetLineColor(const int r, const int g, const int b);
     void SetLineWidth(const int width);
 
      //Members (variables) of class Shape
-     Shape* Next(){return mNextPtr;}
-     Shape* Previous(){return mPrevPtr;}
+//     Shape* Next(){return mNextPtr;}
+//     Shape* Previous(){return mPrevPtr;}
 
 
 private:
-   int          mID;         // object ID
-   int          mTx, mTy;    // object translation
-   int          mRz;         // object rotation
-   int          mSx, mSy;    // object scale
-   int          mRedF;        // object fill color
-   int          mGreenF;      // object fill color
-   int          mBlueF;       // object fill color
-   int          mRedL;        // object line color
-   int          mGreenL;      // object line color
-   int          mBlueL;       // object line color
-   int          mlWidth;     // object line width
+   int          mID;              // object ID
+   int          mTx, mTy, mTz;    // object translation
+   int          mRx, mRy, mRz;    // object rotation
+   int          mSx, mSy, mSz;    // object scale
+   float        mRedF;            // object fill color
+   float        mGreenF;          // object fill color
+   float        mBlueF;           // object fill color
+   int          mRedL;            // object line color
+   int          mGreenL;          // object line color
+   int          mBlueL;           // object line color
+   int          mlWidth;          // object line width
 
-   Shape* mNextPtr;     // linked list next pointer
-   Shape* mPrevPtr;     // linked list previous pointer
+//   Shape* mNextPtr;     // linked list next pointer
+//   Shape* mPrevPtr;     // linked list previous pointer
 };
 
 #endif // SHAPE_H
