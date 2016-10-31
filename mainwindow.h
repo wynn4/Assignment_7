@@ -34,6 +34,8 @@ public:
 
     void open_and_parse_file();
 
+    void write_file();
+
 private slots:
     void on_actionOpen_2_triggered();
 

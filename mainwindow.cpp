@@ -55,7 +55,7 @@ void MainWindow::on_actionOpen_2_triggered()
 
 void MainWindow::on_actionSave_As_2_triggered()
 {
-
+    write_file();
 }
 
 void MainWindow::on_actionClose_triggered()
@@ -183,6 +183,97 @@ void MainWindow::open_and_parse_file()
         }
 
     }
+}
+
+void MainWindow::write_file()
+{
+    int ID;
+    int x, y, z;
+    int width, height, depth;
+    int rad_x, rad_y, rad_z;
+    int tx, ty, tz;
+    int rx, ry, rz;
+    int sx, sy, sz;
+    float redf, greenf, bluef;
+
+    QString filter = "Text Files (*.txt)";
+    QString file_to_save = QFileDialog::getSaveFileName(this, "Save a Shape File", "/home/jesse/Desktop/", filter);
+    std::string file_to_save_to = file_to_save.toStdString();
+    std::ofstream outfile(file_to_save_to);
+
+    for (std::list<Shape*>::iterator iterator=L.begin(); iterator != L.end(); iterator++)
+    {
+        Shape* obj = *iterator;
+        if(obj->GetType() == 1)
+        {
+            Box* box = dynamic_cast<Box*>(obj);
+            box->GetIdentifier(ID);
+            box->GetOrigin(x, y, z);
+            box->GetWidth(width);
+            box->GetHeight(height);
+            box->GetDepth(depth);
+            box->GetFillColor(redf, greenf, bluef);
+            box->GetTranslation(tx, ty, tz);
+            box->GetRotation(rx, ry, rz);
+            box->GetScale(sx, sy, sz);
+            outfile << "BOX" << ' ' << ID << std::endl;
+            outfile << x << ' ' << y << ' ' << z << ' ' << width << ' ' << height << ' ' << depth << std::endl;
+            outfile << redf << ' ' << greenf << ' ' << bluef << std::endl;
+            outfile << tx << ' ' << ty << ' ' << tz << std::endl;
+            outfile << rx << std::endl;
+            outfile << ry << std::endl;
+            outfile << rz << std::endl;
+            outfile << sx << ' ' << sy << ' ' << sz << '\n' << std::endl;
+
+        }
+        else if(obj->GetType() == 2)
+        {
+            Ellipsoid* ellipsoid = dynamic_cast<Ellipsoid*>(obj);
+            ellipsoid->GetIdentifier(ID);
+            ellipsoid->GetOrigin(x, y, z);
+            ellipsoid->GetRadiusX(rad_x);
+            ellipsoid->GetRadiusY(rad_y);
+            ellipsoid->GetRadiusZ(rad_z);
+            ellipsoid->GetFillColor(redf, greenf, bluef);
+            ellipsoid->GetTranslation(tx, ty, tz);
+            ellipsoid->GetRotation(rx, ry, rz);
+            ellipsoid->GetScale(sx, sy, sz);
+            outfile << "ELLIPSOID" << ' ' << ID << std::endl;
+            outfile << x << ' ' << y << ' ' << z << ' ' << rad_x << ' ' << rad_y << ' ' << rad_z << std::endl;
+            outfile << redf << ' ' << greenf << ' ' << bluef << std::endl;
+            outfile << tx << ' ' << ty << ' ' << tz << std::endl;
+            outfile << rx << std::endl;
+            outfile << ry << std::endl;
+            outfile << rz << std::endl;
+            outfile << sx << ' ' << sy << ' ' << sz << '\n' << std::endl;
+
+        }
+        else if(obj->GetType() == 3)
+        {
+            Cone* cone = dynamic_cast<Cone*>(obj);
+            cone->GetIdentifier(ID);
+            cone->GetOrigin(x, y, z);
+            cone->GetRadiusX(rad_x);
+            cone->GetRadiusY(rad_y);
+            cone->GetHeight(height);
+            cone->GetFillColor(redf, greenf, bluef);
+            cone->GetTranslation(tx, ty, tz);
+            cone->GetRotation(rx, ry, rz);
+            cone->GetScale(sx, sy, sz);
+            outfile << "CONE" << ' ' << ID << std::endl;
+            outfile << x << ' ' << y << ' ' << z << ' ' << rad_x << ' ' << rad_y << ' ' << height << std::endl;
+            outfile << redf << ' ' << greenf << ' ' << bluef << std::endl;
+            outfile << tx << ' ' << ty << ' ' << tz << std::endl;
+            outfile << rx << std::endl;
+            outfile << ry << std::endl;
+            outfile << rz << std::endl;
+            outfile << sx << ' ' << sy << ' ' << sz << '\n' << std::endl;
+
+        }
+    }
+
+    outfile.close();
+    QMessageBox::information(this,"Saved File",file_to_save);
 }
 
 void MainWindow::mTokenize(const std::string &str, std::vector<std::string> &tokens, const std::string &delimiters)
