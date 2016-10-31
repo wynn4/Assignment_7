@@ -310,7 +310,7 @@ void MeshFactory::GenerateEllipsoidMesh(double rx,double ry, double rz,int refin
 }
 
 
-void MeshFactory::GenerateCubeMesh(double width, double height,double depth, int refinement_level, MeshGeometry3D* geometry)
+void MeshFactory::GenerateCubeMesh(int width, int height, int depth, int refinement_level, MeshGeometry3D* geometry)
 {
     MeshFactoryData data(geometry);
     std::vector<QVector3D> faces;

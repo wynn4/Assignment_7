@@ -23,9 +23,9 @@
 
 
 #include "meshfactory.h"
-static int timer_interval = 100;        // timer interval (millisec)
+static int timer_interval = 50;        // timer interval (millisec)
 
-
+//Constructor
 OpenGLExample::OpenGLExample( QWidget *parent ) : QOpenGLWidget(parent)
 {
     startTimer( timer_interval );
@@ -47,6 +47,7 @@ OpenGLExample::OpenGLExample( QWidget *parent ) : QOpenGLWidget(parent)
     mRotateAxis.setY(1);
 }
 
+//Destructor
 OpenGLExample::~OpenGLExample()
 {
     // Cleanup VBO and shader
@@ -63,7 +64,8 @@ void OpenGLExample::initializeGL()
     initializeOpenGLFunctions();
 
     // Dark blue background
-    glClearColor(0.0f, 0.0f, 0.6f, 0.0f);
+    //glClearColor(0.0f, 0.0f, 0.6f, 0.0f);
+    glClearColor(0.1f, 0.1f, 0.1f, 0.0f);
 
     // Enable depth test
     glEnable(GL_DEPTH_TEST);
@@ -217,7 +219,7 @@ void OpenGLExample::initializeGL()
     //Send some of our data to opengl.  This data is constant and doesn't change with each render
     glUseProgram(mProgramHandle);
     glUniform3f(mLightPositionUHandle, mLightPos[0], mLightPos[1], mLightPos[2]);
-    glUniform3f(mColorUHandle, 1.0, 0.0, 0.0);
+    glUniform3f(mColorUHandle, 0.8, 0.3, 0.0);
 
 }
 

@@ -36,6 +36,8 @@ public:
 
     void write_file();
 
+    void generate_3D_geometry();
+
 private slots:
     void on_actionOpen_2_triggered();
 

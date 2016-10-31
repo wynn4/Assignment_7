@@ -33,7 +33,7 @@ class MeshFactory
 public:
     MeshFactory();
     void GenerateEllipsoidMesh(double rx, double ry, double rz, int refinement_level, MeshGeometry3D *geometry);
-    void GenerateCubeMesh(double width, double height, double depth, int refinement_level, MeshGeometry3D *geometry);
+    void GenerateCubeMesh(int width, int height, int depth, int refinement_level, MeshGeometry3D *geometry);
     void GenerateConeMesh(double rx, double ry, double height, int divisions, MeshGeometry3D *geometry);
 
 private:
