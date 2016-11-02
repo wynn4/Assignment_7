@@ -17,14 +17,18 @@
 #include <QOpenGLShaderProgram>
 #include <QOpenGLFunctions>
 #include <QKeyEvent>
+
 class MeshGeometry3D;
 
 
 class OpenGLExample : public QOpenGLWidget, protected QOpenGLFunctions
 {
+
   public:
-    OpenGLExample( QWidget *parent=0 );
-    ~OpenGLExample();
+
+    OpenGLExample( QWidget *parent=0 ); //constructor
+    ~OpenGLExample();                   //destructor
+    void load_data(std::vector<MeshGeometry3D*> all_geometry);
 
 
   protected:
@@ -40,12 +44,14 @@ class OpenGLExample : public QOpenGLWidget, protected QOpenGLFunctions
     GLuint mMVPMatrixUHandle;
     GLuint mMVMatrixUHandle;
     GLuint mLightPositionUHandle;
+    GLuint mColorAHandle;
     GLuint mColorUHandle;
     GLuint mPositionAHandle;
     GLuint mNormalAHandle;
     GLuint mVertexBufferHandle;
     GLuint mIndexBufferHandle;
     GLuint mNormalBufferHandle;
+    GLuint mColorBufferHandle;
 
     int64_t mNumIndicies;
     QMatrix4x4 mMVP;
@@ -53,6 +59,15 @@ class OpenGLExample : public QOpenGLWidget, protected QOpenGLFunctions
     QMatrix4x4 mProjectionMatrix;
     QMatrix4x4 mViewMatrix;
     QMatrix4x4 mRotate;
+
+    std::vector<GLfloat> mAll_verticies;
+    std::vector<GLuint> mAll_indicies;
+    std::vector<GLfloat> mAll_normals;
+
+    std::vector<GLfloat> mAll_colors;
+
+    bool data_loaded;
+    bool data_set;
 
 
     int mWidth;

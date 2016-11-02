@@ -24,6 +24,8 @@ public:
     std::vector<GLfloat> mNormals;
     std::vector<GLuint> mIndicies;
 
+    GLfloat Color[3];
+
     void apply_transform(QMatrix4x4& transform);
 };
 

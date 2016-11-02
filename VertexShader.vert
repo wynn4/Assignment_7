@@ -16,8 +16,9 @@
 uniform mat4 u_MVPMatrix;     // A constant representing the combined model/view/projection matrix.
 uniform mat4 u_MVMatrix;      // A constant representing the combined model/view matrix.
 uniform vec3 u_LightPos;      // The position of the light in eye space.
-uniform vec3 u_Color;
+//uniform vec3 u_Color;
 
+attribute vec3 a_Color;
 attribute vec3 a_Position;    // Per-vertex position information we will pass in.
 attribute vec3 a_Normal;      // Per-vertex normal information we will pass in.
 
@@ -47,7 +48,7 @@ void main()
     diffuse = clamp(dot(modelViewNormal,lightVector),0.0,1.0);
 
     // Multiply the color by the illumination level. It will be interpolated across the triangle.
-    v_Color = u_Color * diffuse;
+    v_Color = a_Color * diffuse;
 
     // gl_Position is a special variable used to store the final position.
     // Multiply the vertex by the matrix to get the final point in normalized screen coordinates.

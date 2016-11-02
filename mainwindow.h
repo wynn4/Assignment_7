@@ -28,6 +28,7 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
+
 public:
     explicit MainWindow(QWidget *parent = 0);   //constructor
     ~MainWindow();                              //destructor
@@ -53,6 +54,7 @@ private:
     Ui::MainWindow *ui;
     OpenGLExample* mOpenGLExample;
     std::list<Shape*> L;
+    MeshGeometry3D* mShapes;
 };
 
 #endif // MAINWINDOW_H

@@ -29,6 +29,8 @@ static int timer_interval = 50;        // timer interval (millisec)
 OpenGLExample::OpenGLExample( QWidget *parent ) : QOpenGLWidget(parent)
 {
     startTimer( timer_interval );
+    //add dataloaded = bool_value;
+    //add dataset = bool_value;
     mMaxCoord=4;
     mProgramHandle=0;
 
@@ -41,10 +43,13 @@ OpenGLExample::OpenGLExample( QWidget *parent ) : QOpenGLWidget(parent)
     mMVPMatrixUHandle=0;
     mMVMatrixUHandle=0;
     mLightPositionUHandle=0;
+    mColorAHandle=0;
     mColorUHandle=0;
     mTimerCount=0;
     mRotateAxis.setX(1);
     mRotateAxis.setY(1);
+    data_loaded = false;
+    data_set = false;
 }
 
 //Destructor
@@ -64,8 +69,8 @@ void OpenGLExample::initializeGL()
     initializeOpenGLFunctions();
 
     // Dark blue background
-    //glClearColor(0.0f, 0.0f, 0.6f, 0.0f);
-    glClearColor(0.1f, 0.1f, 0.1f, 0.0f);
+    glClearColor(0.0f, 0.6f, 0.0f, 0.0f);
+
 
     // Enable depth test
     glEnable(GL_DEPTH_TEST);
@@ -103,8 +108,8 @@ void OpenGLExample::initializeGL()
     // Get a handle for our "u_LightPos" uniform
     mLightPositionUHandle = glGetUniformLocation(mProgramHandle, "u_LightPos");
 
-    // Get a handle for our "u_Color" uniform
-    mColorUHandle = glGetUniformLocation(mProgramHandle, "u_Color");
+//    // Get a handle for our "u_Color" uniform
+//    mColorUHandle = glGetUniformLocation(mProgramHandle, "u_Color");
 
 
     // Get a handle for our "a_Position" attribute
@@ -113,96 +118,29 @@ void OpenGLExample::initializeGL()
     // Get a handle for our "a_Normal" attribute
     mNormalAHandle = glGetAttribLocation(mProgramHandle, "a_Normal");
 
+    // Get a handle for our "a_Color" attribute
+    mColorAHandle = glGetAttribLocation(mProgramHandle, "a_Color");
+
+
+
     //*** Geometry Mesh Generation Section  ***
     //Create the triangle mesh for our basic shapes
-    MeshGeometry3D ellipsoid;
-    MeshGeometry3D cone;
-    MeshGeometry3D cube;
 
-    std::vector<MeshGeometry3D*> all_geometry;
-    //Create the mesh factory
-    MeshFactory factory;
-
-    //Create a mesh for a ellipsoid
-    factory.GenerateEllipsoidMesh(1.5,1,.75,2,&ellipsoid);
-    //Create the model matrix for the model transformations
-    QMatrix4x4 EM;
-    EM.translate(0,4,0);
-    //transform the ellipsoid
-    ellipsoid.apply_transform(EM);
-    //Add the ellipsoid mesh to our list of all geometry
-    all_geometry.push_back(&ellipsoid);
-
-    //Create mesh for a cube.
-    factory.GenerateCubeMesh(1,1,1,0,&cube);
-    //transform the cube
-    QMatrix4x4 CM;
-    CM.translate(0,-4,0);
-    cube.apply_transform(CM);
-    //Add the cube mesh to our list of all geometry
-    all_geometry.push_back(&cube);
-
-    //Create a mesh for cone
-    factory.GenerateConeMesh(2,2,3,75,&cone);
-    //We aren't going to transform our cone.  We will leave it where the meshfactory created it.
-    //Add the cone mesh to our list of all geometry
-    all_geometry.push_back(&cone);
+    ////This stuff removed and moved to MainWindow.cpp in generate_geometry
 
 
     //*** Prepare the geometry mesh to be passed to opengl  ***
-    std::vector<GLfloat> all_verticies;
-    std::vector<GLuint> all_indicies;
-    std::vector<GLfloat> all_normals;
 
-    unsigned int offset=0;
-    for(int i=0;i<all_geometry.size();i++)//For each geometry mesh in our list created above.
-    {
-        //Add the verticies coordinates from each geometry mesh to one vector.
-        all_verticies.insert(all_verticies.end(),all_geometry[i]->mVerticies.begin(),all_geometry[i]->mVerticies.end());
-        //Add the normals coordinates from each geometry mesh to one vector
-        all_normals.insert(all_normals.end(),all_geometry[i]->mNormals.begin(),all_geometry[i]->mNormals.end());
+    ////This stuff removed and moved to "load_data" at the end of this file
 
-        //Combine the triangle indicies in to one vector.
-        for(int x=0;x<all_geometry[i]->mIndicies.size();x++)
-        {
-            all_indicies.push_back(all_geometry[i]->mIndicies[x]+offset);//remember to offset the indicies
-        }
-        offset=(unsigned int)all_verticies.size()/3;//calculate the offset.
-    }
-
-
-    mNumIndicies=all_indicies.size();//total number of triangles
-
-
-    //*** Send the data to opengl section  ****
-    //Create the vertex buffer
-    glGenBuffers(1, &mVertexBufferHandle);
-    //Bind the vertex buffer to be an array buffer
-    glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferHandle);
-    //Copy our vertex data to the opengl buffer
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*all_verticies.size(), all_verticies.data(), GL_STATIC_DRAW);
-
-    //Create the index buffer
-    glGenBuffers(1, &mIndexBufferHandle);
-    //Bind the index buffer to be an element array buffer
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBufferHandle);
-    //Copy our index data to the opengl buffer.
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * all_indicies.size(), all_indicies.data(), GL_STATIC_DRAW);
-
-    //Create the normal buffer
-    glGenBuffers(1, &mNormalBufferHandle);
-    //Bind the normal buffer to be an array buffer
-    glBindBuffer(GL_ARRAY_BUFFER, mNormalBufferHandle);
-    //Copy our normal data to the opengl buffer.
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*all_normals.size(), all_normals.data(), GL_STATIC_DRAW);
 
 
 
     //***  Set up the View Matricies and Lights Section  ****
     //Find the largest coordinate in our vertex data.
     //We are using this information to set the position of our camera and light outside the geometry
-    std::vector<GLfloat>::iterator iter=std::max_element(all_verticies.begin(),all_verticies.end());
-    mMaxCoord=*iter;
+    //std::vector<GLfloat>::iterator iter=std::max_element(mAll_verticies.begin(),mAll_verticies.end());
+    mMaxCoord=5;
 
     //Create the view matrix
     mViewMatrix.setToIdentity();
@@ -219,7 +157,7 @@ void OpenGLExample::initializeGL()
     //Send some of our data to opengl.  This data is constant and doesn't change with each render
     glUseProgram(mProgramHandle);
     glUniform3f(mLightPositionUHandle, mLightPos[0], mLightPos[1], mLightPos[2]);
-    glUniform3f(mColorUHandle, 0.8, 0.3, 0.0);
+
 
 }
 
@@ -228,6 +166,46 @@ void OpenGLExample::paintGL(void)
     //This function is run each time a render is needed.
     // Clear the screen
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    ////ADDED STUFF FROM INITIALIZE_GL
+    if(data_set)
+    {
+    //*** Send the data to opengl section  ****
+    //Create the vertex buffer
+    glGenBuffers(1, &mVertexBufferHandle);
+    //Bind the vertex buffer to be an array buffer
+    glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferHandle);
+    //Copy our vertex data to the opengl buffer
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*mAll_verticies.size(), mAll_verticies.data(), GL_STATIC_DRAW);
+
+    //Create the index buffer
+    glGenBuffers(1, &mIndexBufferHandle);
+    //Bind the index buffer to be an element array buffer
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBufferHandle);
+    //Copy our index data to the opengl buffer.
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * mAll_indicies.size(), mAll_indicies.data(), GL_STATIC_DRAW);
+
+    //Create the normal buffer
+    glGenBuffers(1, &mNormalBufferHandle);
+    //Bind the normal buffer to be an array buffer
+    glBindBuffer(GL_ARRAY_BUFFER, mNormalBufferHandle);
+    //Copy our normal data to the opengl buffer.
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*mAll_normals.size(), mAll_normals.data(), GL_STATIC_DRAW);
+
+    //Create the color buffer
+    glGenBuffers(1, &mColorBufferHandle);
+    //Bind the color buffer to be an array buffer
+    glBindBuffer(GL_ARRAY_BUFFER, mColorBufferHandle);
+    //Copy our color data to the opengl buffer.
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*mAll_colors.size(), mAll_colors.data(), GL_STATIC_DRAW);
+
+    data_set = false;
+    data_loaded = true;
+
+    }
+    ////
+    //// END Stuff added from INITIALIZE_GL
+
 
     //***   Create Projection matrix section ****
     mProjectionMatrix.setToIdentity();
@@ -240,6 +218,9 @@ void OpenGLExample::paintGL(void)
 
     // Use our shader
     glUseProgram(mProgramHandle);
+
+    if(data_loaded)
+    {
 
     // Send our transformation to the currently bound shader,
     // in the "MVP" uniform
@@ -275,6 +256,20 @@ void OpenGLExample::paintGL(void)
                 (void*)0                      // array buffer offset
                 );
 
+    //3rd attribute buffer : colors
+    glEnableVertexAttribArray(2);
+    //Bind the color buffer as an array buffer.
+    glBindBuffer(GL_ARRAY_BUFFER, mColorBufferHandle);
+    //Tell opengl how to read our color data.  This will be put in the a_Color in our shader
+    glVertexAttribPointer(
+                mColorAHandle,  // The attribute we want to configure
+                3,                            // size
+                GL_FLOAT,                     // type
+                GL_FALSE,                     // normalized?
+                0,                            // stride
+                (void*)0                      // array buffer offset
+                );
+
 
     //Draw the geometry
     glDrawElements(GL_TRIANGLES, mNumIndicies, GL_UNSIGNED_INT,nullptr);
@@ -282,6 +277,8 @@ void OpenGLExample::paintGL(void)
     //Disable the arrays.
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
+
+    }
 
 }
 
@@ -333,6 +330,42 @@ void OpenGLExample::keyPressEvent(QKeyEvent *e)
     e->accept();  // Don't pass any key events to parent
 }
 
+void OpenGLExample::load_data(std::vector<MeshGeometry3D*> all_geometry)
+{
+    unsigned int offset=0;
+    for(int i=0;i<all_geometry.size();i++)//For each geometry mesh in our list created above.
+    {
+        //Add the verticies coordinates from each geometry mesh to one vector.
+        mAll_verticies.insert(mAll_verticies.end(),all_geometry[i]->mVerticies.begin(),all_geometry[i]->mVerticies.end());
+        //Add the normals coordinates from each geometry mesh to one vector
+        mAll_normals.insert(mAll_normals.end(),all_geometry[i]->mNormals.begin(),all_geometry[i]->mNormals.end());
+
+        //Add the colors from each geometry mesh to one vector
+        for(int j=0;j<all_geometry[i]->mNormals.size()/3; j++)
+        {
+            mAll_colors.push_back(all_geometry[i]->Color[0]);
+            mAll_colors.push_back(all_geometry[i]->Color[1]);
+            mAll_colors.push_back(all_geometry[i]->Color[2]);
+
+        }
+
+        //Combine the triangle indicies in to one vector.
+        for(int x=0;x<all_geometry[i]->mIndicies.size();x++)
+        {
+            mAll_indicies.push_back(all_geometry[i]->mIndicies[x]+offset);//remember to offset the indicies
+        }
+        offset=(unsigned int)mAll_verticies.size()/3;//calculate the offset.
+    }
+
+
+    mNumIndicies=mAll_indicies.size();//total number of triangles
+
+    if(mNumIndicies != 0)
+    {
+        data_set = true;
+        update();
+    }
+}
 
 
 
