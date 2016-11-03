@@ -68,8 +68,8 @@ void OpenGLExample::initializeGL()
     // initialize OpenGL
     initializeOpenGLFunctions();
 
-    // Dark blue background
-    glClearColor(0.0f, 0.6f, 0.0f, 0.0f);
+    // Nice aqua background
+    glClearColor(0.0f, 0.8f, 0.8f, 0.0f);
 
 
     // Enable depth test
